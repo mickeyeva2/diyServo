@@ -16,6 +16,13 @@
 #include "Arduino.h"
 
 
+/// @brief 
+enum class Direction : bool
+{
+	FORWARD = true,
+	BACKWARD = false
+};
+
 struct miniServos
 {
   int analogChannels;
@@ -32,6 +39,7 @@ class multiServo {
     int hbridge_Ctrl_B; //arduino控制H桥的引脚编号
 
   public:
+    multiServo(int);
     multiServo(int analogChannel, int L9110s_IA, int L9110s_IB); //构造函数
     ~multiServo(); //默认析构函数
 
@@ -41,8 +49,9 @@ class multiServo {
     void disattach(int); //释放引脚与LED的绑定，使得引脚可以控制其他的东西
     int readAnalogData(int, int);
     //void initServo(); //上电后是舵机摆臂回到归中位置，是否可以不用传入参数
-    
-    void ctrlServo(int); //根据外部输入ADC值或PWM转化来的ADC值，移动舵机摆臂到目的位置
+
+    bool direction(int, int, int);
+    void ctrlServo(int, int, int); //根据外部输入ADC值或PWM转化来的ADC值，移动舵机摆臂到目的位置
 
     void forward();
     void backward();
