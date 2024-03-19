@@ -1,6 +1,6 @@
 /**
  * @file diyServo.cpp
- * @author M1ck3y (you@domain.com)
+ * @author M1ck3y (mickeyeaii@gmail.com)
  * @brief 
  * @version 0.1
  * @date 2024-03-18
@@ -9,8 +9,8 @@
  * 
  */
 
-#include "diyServo.h"
 #include <Arduino.h>
+#include "diyServo.h"
 
 int arraySize = 10;
 //int middlePosition = 512;
@@ -62,6 +62,7 @@ int diyServo::readAnalogData(int analogChannel, int arraySize) {
   int temp = 0;
   bool iSwap = true;
   while(iSwap) {
+    //while 是否需要，只运行了一个循环？
     iSwap = false;
     for(int i=0;i<arraySize-1;i++) {    
       if(analogData[i] > analogData[i+1]){
