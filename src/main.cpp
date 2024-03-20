@@ -10,10 +10,11 @@
  */
 
 #include <Arduino.h>
+//#include <avr/io.h>
 #include "diyServo.h"
 
 diyServo miniServo(A2,10,12);
-
+//diyServo mini2Servo(A2,PORTB0,PORTB2);
 void lightLED(byte speed, byte speedXus);
 
 //char forwardStr[] = "Forward speed = ";
@@ -36,7 +37,7 @@ diyServo lineServo1(lineServo1Pin.analogChannels, lineServo1Pin.hBridgeIA, lineS
 
 
 void setup() {
-   
+  PORTD = 1 << PORTD3; // 1<<PD3, 1左移3位得到3位得到二进制数 0000 0100
   //diyServo microServo2();
   pinMode(LED_BUILTIN, OUTPUT);//build in led on PB5 (Arduino pin D13)
   //Serial.begin(9600);

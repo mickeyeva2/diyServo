@@ -51,8 +51,8 @@ class multiServo {
     //void initServo(); //上电后是舵机摆臂回到归中位置，是否可以不用传入参数
 
     bool direction(int, int, int);
-    void ctrlServo(int, int, int); //根据外部输入ADC值或PWM转化来的ADC值，移动舵机摆臂到目的位置
-
+    void ctrlServo(int destinationADC[],int insidePotADC[], int adcRound); //根据外部输入ADC值或PWM转化来的ADC值，移动舵机摆臂到目的位置
+    int servoSpeed(int destadc, int insideadc,int adcRound);
     void forward();
     void backward();
     void standby();
