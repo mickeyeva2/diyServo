@@ -27,19 +27,6 @@ diyServo::diyServo(int analogChannel, int L9110s_IA, int L9110s_IB) {
   pinMode(hbridge_Ctrl_B, OUTPUT);
 }
 
-/*
-/// @brief 重新写一个初始化多个五线舵机的构造函数
-/// @param analogChannels[] 若干个MCU读取内部反馈电位器ADC的引脚
-/// @param L9110s_IAs[] 若干个MCU驱动H桥的一个引脚
-/// @param L9110s_IBs[] 若干个MCU驱动H桥的另一个引脚
-/// @note analogChannels[] = {A2,A0,A1}
-/// @note L9110s_IAs[] = {D10,D5,D3}
-/// @note L9110s_IBs[] = {D12,D6,D9}
-//struct {int analogChannels[];int L9110s_IAs[];int L9110s_IBs[];};
-diyServo::diyServo(int analogChannels[], int L9110s_IAs[],int L9110s_IBs[]){
-
-}   
-*/
 
 /// @brief 析构函数，调用成员函数disattach()，拉低引脚电平并设置为INPUT模式
 diyServo::~diyServo() {
@@ -51,7 +38,7 @@ diyServo::~diyServo() {
 /// @param analogChannel 电位器读数引脚对应的MCU引脚，arduino的A0~A7
 /// @param arraySize 自定义读取次数，默认读取10次
 /// @return 默认取中间8个的平均值
-int diyServo::readAnalogData(int analogChannel, int arraySize) {
+int diyServo::readAnalogData(int analogChannel, int arraySize = 10) {
   //internal_Potentiometer_ADC = analogChannel;
   int analogData[arraySize];
   for(int i=0;i<arraySize;i++) {
@@ -64,12 +51,12 @@ int diyServo::readAnalogData(int analogChannel, int arraySize) {
   while(iSwap) {
     //while 是否需要，只运行了一个循环？
     iSwap = false;
-    for(int i=0;i<arraySize-1;i++) {    
+    for(int i=0;i<arraySize-1;i++) {
       if(analogData[i] > analogData[i+1]){
         iSwap = true;
-        temp = analogData[i];               
-        analogData[i] = analogData[i+1];               
-        analogData[i+1] = temp;           
+        temp = analogData[i];
+        analogData[i] = analogData[i+1];
+        analogData[i+1] = temp;
       }
     }
   }
@@ -82,25 +69,6 @@ int diyServo::readAnalogData(int analogChannel, int arraySize) {
   temp = temp/(arraySize-2); //求平均值
   return temp;
 }
-
-/*
-/// @brief 初始化五线舵机，使摆臂归中
-void diyServo::initServo() {
-//the motor drive the internal pot, when the pot reach the middle position motor stop.
-  int currentPosition = readAnalogData(arraySize);
-  while (currentPosition > middlePosition || currentPosition < middlePosition) {
-    int val = currentPosition - middlePosition; //512
-    byte speed = map(abs(val),0,middlePosition,0,255);
-    if(val > 0) forward();
-    if(val < 0) backward();
-    if(speed < 10) speed = 0; //10 {0，255}相当于+40，-40{0，1023}，反馈电位器位于472与552之间认为是摆臂归中的。
-    delayMicroseconds(speed * 30);
-    standby();
-    delayMicroseconds((255 - speed) * 30);
-    currentPosition = readAnalogData(arraySize);
-  }
-}
-*/
 
 /// @brief 根据外部输入ADC值或PWM转化来的ADC值，移动舵机摆臂到目的位置
 /// @param destinationADC 外部输入的ADC值（可以是PWM值转化而来）{0，1023}
@@ -151,35 +119,3 @@ void diyServo::brake() {
   digitalWrite(hbridge_Ctrl_A, HIGH);
   digitalWrite(hbridge_Ctrl_B, HIGH);
 }
-
-
-/*
-void diyServo::forward(int L9110s_IA,int L9110s_IB) {
-  hbridge_Ctrl_A = L9110s_IA;
-  hbridge_Ctrl_B = L9110s_IB;
-  digitalWrite(hbridge_Ctrl_A, HIGH);
-  digitalWrite(hbridge_Ctrl_B, LOW);
-}
-
-void diyServo::backward(int L9110s_IA,int L9110s_IB) {
-  hbridge_Ctrl_A = L9110s_IA;
-  hbridge_Ctrl_B = L9110s_IB;
-  digitalWrite(hbridge_Ctrl_A, LOW);
-  digitalWrite(hbridge_Ctrl_B, HIGH);
-}
-
-void diyServo::standby(int L9110s_IA,int L9110s_IB) {
-  hbridge_Ctrl_A = L9110s_IA;
-  hbridge_Ctrl_B = L9110s_IB;
-  digitalWrite(hbridge_Ctrl_A, LOW);
-  digitalWrite(hbridge_Ctrl_B, LOW);
-}
-
-void diyServo::brake(int L9110s_IA,int L9110s_IB) {
-  hbridge_Ctrl_A = L9110s_IA;
-  hbridge_Ctrl_B = L9110s_IB;
-  digitalWrite(hbridge_Ctrl_A, HIGH);
-  digitalWrite(hbridge_Ctrl_B, HIGH);
-}
-
-*/
