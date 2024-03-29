@@ -27,7 +27,7 @@ diyServo::diyServo(int analogChannel, int L9110s_IA, int L9110s_IB) {
   pinMode(hbridge_Ctrl_B, OUTPUT);
 }
 
-
+//ceshi
 /// @brief 析构函数，调用成员函数disattach()，拉低引脚电平并设置为INPUT模式
 diyServo::~diyServo() {
   disattach(hbridge_Ctrl_A);
